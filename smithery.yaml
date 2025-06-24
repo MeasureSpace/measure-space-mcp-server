@@ -1,0 +1,39 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - hourlyWeatherApiKey
+      - dailyWeatherApiKey
+      - dailyClimateApiKey
+      - airQualityApiKey
+      - geocodingApiKey
+    properties:
+      hourlyWeatherApiKey:
+        type: string
+        description: hourly weather API key for authentication
+      dailyWeatherApiKey:
+        type: string
+        description: daily weather API key for authentication
+      dailyClimateApiKey:
+        type: string
+        description: daily climate API key for authentication
+      airQualityApiKey:
+        type: string
+        description: air quality API key for authentication
+      geocodingApiKey:
+        type: string
+        description: geocoding API key for authentication
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'python', args: ['main.py'], env: { GEOCODING_API_KEY: config.geocodingApiKey,  HOURLY_WEATHER_API_KEY: config.hourlyWeatherApiKey, DAILY_WEATHER_API_KEY: config.dailyWeatherApiKey, DAILY_CLIMATE_API_KEY: config.dailyClimateApiKey, AIR_QUALITY_API_KEY: config.airQualityApiKey} })
+  exampleConfig:
+    - geocodingApiKey: YOUR_GEOCODING_API_KEY
+    - hourlyWeatherApiKey: YOUR_HOURLY_WEATHER_API_KEY
+    - dailyWeatherApiKey: YOUR_DAILY_WEATHER_API_KEY
+    - dailyClimateApiKey: YOUR_DAILY_CLIMATE_API_KEY
+    - airQualityApiKey: YOUR_AIR_QUALITY_API_KEY
