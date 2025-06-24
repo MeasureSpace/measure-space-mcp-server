@@ -74,7 +74,8 @@ Open the `cladue_desktop_config.json` file and add the following setup. Restart 
 ### Run the server
 
 ```bash
-uv run main.py
+# Go into your uv built environment
+python main.py
 ```
 
 The server will start on http://localhost:8000 by default.
