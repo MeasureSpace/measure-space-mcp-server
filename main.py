@@ -133,4 +133,4 @@ async def find_nearest_city_from_latitude_longitude(latitude: float, longitude: 
 # Run the MCP server
 if __name__ == "__main__":
     # This starts a Server-Sent Events (SSE) endpoint on port 8000
-    mcp.run()
+    mcp.run(host=os.getenv('HOST', '0.0.0.0'), port=int(os.getenv('PORT', 8000)))
