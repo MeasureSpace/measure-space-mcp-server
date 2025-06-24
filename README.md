@@ -23,6 +23,14 @@ A Model Context Protocol (MCP) server for weather, climate, and air quality fore
 
 ## Installation
 
+### Installing via Smithery
+
+To install this server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@MeasureSpace/measure-space-mcp-server):
+
+```bash
+npx -y @smithery/cli install @MeasureSpace/measure-space-mcp-server --client claude
+```
+
 ### Manual Installation
 
 1. Clone this repository:
