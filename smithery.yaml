@@ -3,7 +3,6 @@
 startCommand:
   type: stdio
   configSchema:
-    # JSON Schema defining the configuration options for the MCP.
     type: object
     required:
       - hourlyWeatherApiKey
@@ -27,13 +26,11 @@ startCommand:
       geocodingApiKey:
         type: string
         description: geocoding API key for authentication
-  commandFunction:
-    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
-    |-
+  commandFunction: |-
     (config) => ({ command: 'python', args: ['main.py'], env: { GEOCODING_API_KEY: config.geocodingApiKey,  HOURLY_WEATHER_API_KEY: config.hourlyWeatherApiKey, DAILY_WEATHER_API_KEY: config.dailyWeatherApiKey, DAILY_CLIMATE_API_KEY: config.dailyClimateApiKey, AIR_QUALITY_API_KEY: config.airQualityApiKey} })
   exampleConfig:
-    - geocodingApiKey: YOUR_GEOCODING_API_KEY
-    - hourlyWeatherApiKey: YOUR_HOURLY_WEATHER_API_KEY
-    - dailyWeatherApiKey: YOUR_DAILY_WEATHER_API_KEY
-    - dailyClimateApiKey: YOUR_DAILY_CLIMATE_API_KEY
-    - airQualityApiKey: YOUR_AIR_QUALITY_API_KEY
+    hourlyWeatherApiKey: YOUR_HOURLY_WEATHER_API_KEY
+    dailyWeatherApiKey: YOUR_DAILY_WEATHER_API_KEY
+    dailyClimateApiKey: YOUR_DAILY_CLIMATE_API_KEY
+    airQualityApiKey: YOUR_AIR_QUALITY_API_KEY
+    geocodingApiKey: YOUR_GEOCODING_API_KEY
