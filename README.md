@@ -1,5 +1,7 @@
 # MCP Server for Measure Space API Services
 
+[![smithery badge](https://smithery.ai/badge/@MeasureSpace/measure-space-mcp-server)](https://smithery.ai/server/@MeasureSpace/measure-space-mcp-server)
+
 A Model Context Protocol (MCP) server for weather, climate, and air quality forecast and geocoding services from [measurespace.io](https://measurespace.io), built with FastAPI and the MCP framework. This server provides various weather, climate, air quality and geocoding related tools that can be used by AI assistants to retrieve weather, climate and air quality forecasts and more.
 
 ## Features
