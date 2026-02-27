@@ -27,7 +27,7 @@ startCommand:
         type: string
         description: geocoding API key for authentication
   commandFunction: |-
-    (config) => ({ command: 'python', args: ['main.py'], env: { GEOCODING_API_KEY: config.geocodingApiKey,  HOURLY_WEATHER_API_KEY: config.hourlyWeatherApiKey, DAILY_WEATHER_API_KEY: config.dailyWeatherApiKey, DAILY_CLIMATE_API_KEY: config.dailyClimateApiKey, AIR_QUALITY_API_KEY: config.airQualityApiKey} })
+    (config) => ({ command: 'node', args: ['dist/index.js'], env: { GEOCODING_API_KEY: config.geocodingApiKey, HOURLY_WEATHER_API_KEY: config.hourlyWeatherApiKey, DAILY_WEATHER_API_KEY: config.dailyWeatherApiKey, DAILY_CLIMATE_API_KEY: config.dailyClimateApiKey, AIR_QUALITY_API_KEY: config.airQualityApiKey } })
   exampleConfig:
     hourlyWeatherApiKey: YOUR_HOURLY_WEATHER_API_KEY
     dailyWeatherApiKey: YOUR_DAILY_WEATHER_API_KEY

@@ -1,0 +1,57 @@
+{
+    "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+    "name": "io.github.MeasureSpace/measure-space-mcp-server",
+    "description": "MCP server for weather, climate, air quality and geocoding from measurespace.io. Provides hourly/daily weather, climate forecasts, air quality data, and city geocoding.",
+    "repository": {
+        "url": "https://github.com/MeasureSpace/measure-space-mcp-server",
+        "source": "github"
+    },
+    "version": "0.1.0",
+    "packages": [
+        {
+            "registryType": "npm",
+            "identifier": "@measurespace/measure-space-mcp-server",
+            "version": "0.1.0",
+            "transport": {
+                "type": "stdio"
+            },
+            "environmentVariables": [
+                {
+                    "name": "GEOCODING_API_KEY",
+                    "description": "API key for geocoding service (city name ↔ lat/lon)",
+                    "isRequired": false,
+                    "format": "string",
+                    "isSecret": true
+                },
+                {
+                    "name": "HOURLY_WEATHER_API_KEY",
+                    "description": "API key for hourly weather forecast service",
+                    "isRequired": false,
+                    "format": "string",
+                    "isSecret": true
+                },
+                {
+                    "name": "DAILY_WEATHER_API_KEY",
+                    "description": "API key for daily weather forecast service",
+                    "isRequired": false,
+                    "format": "string",
+                    "isSecret": true
+                },
+                {
+                    "name": "DAILY_CLIMATE_API_KEY",
+                    "description": "API key for daily climate forecast service",
+                    "isRequired": false,
+                    "format": "string",
+                    "isSecret": true
+                },
+                {
+                    "name": "AIR_QUALITY_API_KEY",
+                    "description": "API key for air quality forecast service",
+                    "isRequired": false,
+                    "format": "string",
+                    "isSecret": true
+                }
+            ]
+        }
+    ]
+}

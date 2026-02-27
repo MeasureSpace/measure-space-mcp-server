@@ -1,0 +1,35 @@
+{
+  "name": "@measurespace/measure-space-mcp-server",
+  "version": "0.1.0",
+  "mcpName": "io.github.MeasureSpace/measure-space-mcp-server",
+  "description": "MCP server for weather, climate, air quality and geocoding from measurespace.io",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MeasureSpace/measure-space-mcp-server.git"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "bin": {
+    "measure-space-mcp-server": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "node --loader ts-node/esm src/index.ts",
+    "start": "node dist/index.js",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.3",
+    "esbuild": "^0.27.3",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/node": "^22.7.5",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "Apache-2.0"
+}

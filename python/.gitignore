@@ -192,9 +192,3 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
-# Node.js
-node_modules/
-
-# Smithery build artifacts
-.smithery/shttp/module.js
-.smithery/shttp/module.js.map
