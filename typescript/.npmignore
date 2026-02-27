@@ -10,3 +10,4 @@ smithery.yaml
 DEVELOPMENT.md
 src/
 tsconfig.json
+.mcpregistry*

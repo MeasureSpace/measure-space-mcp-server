@@ -10,11 +10,6 @@ A Python implementation of the MCP server for [measurespace.io](https://measures
 
 ## Installation
 
-### Via Smithery
-
-```bash
-npx -y @smithery/cli install @MeasureSpace/measure-space-mcp-server --client claude
-```
 
 ### Manual
 
