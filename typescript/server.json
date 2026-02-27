@@ -1,7 +1,7 @@
 {
     "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
     "name": "io.github.MeasureSpace/measure-space-mcp-server",
-    "description": "MCP server for weather, climate, air quality and geocoding from measurespace.io. Provides hourly/daily weather, climate forecasts, air quality data, and city geocoding.",
+    "description": "MCP server for weather, climate, air quality and geocoding from measurespace.io",
     "repository": {
         "url": "https://github.com/MeasureSpace/measure-space-mcp-server",
         "source": "github"
