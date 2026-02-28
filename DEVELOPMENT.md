@@ -24,6 +24,7 @@ measure-space-mcp-server/
 
 # 1. Log in to npm (your token expired)
 npm login
+# Need to generate a new token that can bypass 2FA
 npm config set //registry.npmjs.org/:_authToken YOUR_NEW_TOKEN
 
 # 2. Publish the package to npm
