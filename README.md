@@ -2,7 +2,7 @@
 
 [![smithery badge](https://smithery.ai/badge/@MeasureSpace/measure-space-mcp-server)](https://smithery.ai/server/@MeasureSpace/measure-space-mcp-server)
 
-A Model Context Protocol (MCP) server for weather, climate, and air quality forecast and geocoding services from [measurespace.io](https://measurespace.io).
+A Model Context Protocol (MCP) server for weather, climate, air quality, agriculture, pollen and geocoding services from [measurespace.io](https://measurespace.io).
 
 This repository contains **two implementations** of the same MCP server:
 
@@ -17,6 +17,8 @@ This repository contains **two implementations** of the same MCP server:
 - Daily weather forecast for next 15 days
 - Daily climate forecast for next 9 months
 - Hourly and daily air quality forecast for next 4 days
+- Agriculture: Growing Degree Days (GDD), crop growth stage, heat and frost stress days
+- Pollen: Daily pollen forecast for next 5 days
 - Geocoding: city name → latitude/longitude
 - Geocoding: latitude/longitude → nearest city
 - Timezone and astronomy data (sunrise, sunset)
@@ -32,6 +34,8 @@ Get your API keys from [measurespace.io](https://measurespace.io/pricing). Each 
 | `DAILY_WEATHER_API_KEY` | Daily weather forecast |
 | `DAILY_CLIMATE_API_KEY` | Daily climate forecast |
 | `AIR_QUALITY_API_KEY` | Air quality forecast |
+| `AGRICULTURE_API_KEY` | Agriculture services |
+| `POLLEN_API_KEY` | Daily pollen forecast |
 
 You only need the key(s) for the services you use.
 
