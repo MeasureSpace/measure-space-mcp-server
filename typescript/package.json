@@ -1,6 +1,6 @@
 {
   "name": "@measurespace/measure-space-mcp-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "mcpName": "io.github.MeasureSpace/measure-space-mcp-server",
   "description": "MCP server for weather, climate, air quality and geocoding from measurespace.io",
   "repository": {
