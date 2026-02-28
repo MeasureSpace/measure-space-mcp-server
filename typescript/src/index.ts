@@ -8,6 +8,11 @@ import {
     getDailyClimate,
     getHourlyAirQuality,
     getDailyAirQuality,
+    getGrowingDegreeDays,
+    getGrowthStage,
+    getHeatStressDays,
+    getFrostStressDays,
+    getDailyPollen,
     getLatLonFromCity,
     getCityFromLatLon,
     loadMetadata,
@@ -19,12 +24,19 @@ interface ServerConfig {
     dailyWeatherApiKey: string;
     dailyClimateApiKey: string;
     airQualityApiKey: string;
+    agricultureApiKey: string;
+    pollenApiKey: string;
 }
 
 const unitSchema = z
     .enum(["metric", "imperial"])
     .default("metric")
     .describe("Unit system: 'metric' or 'imperial'");
+
+const agUnitSchema = z
+    .enum(["F", "C"])
+    .default("F")
+    .describe("Temperature unit: 'F' or 'C'");
 
 export function createServer(config: ServerConfig): McpServer {
     const server = new McpServer({
@@ -146,6 +158,133 @@ export function createServer(config: ServerConfig): McpServer {
     );
 
     server.tool(
+        "growing_degree_days",
+        "Get growing degree days (GDD) for given latitude and longitude.",
+        {
+            latitude: z.number().describe("Latitude of the location"),
+            longitude: z.number().describe("Longitude of the location"),
+            start_date: z.string().describe("Start date in YYYY-MM-DD format"),
+            end_date: z.string().describe("End date in YYYY-MM-DD format"),
+            base_temperature: z.number().default(50).describe("Base temperature threshold"),
+            lower_cutoff: z.number().optional().describe("Lower cutoff temperature"),
+            upper_cutoff: z.number().optional().describe("Upper cutoff temperature"),
+            unit: agUnitSchema,
+        },
+        async ({ latitude, longitude, start_date, end_date, base_temperature, lower_cutoff, upper_cutoff, unit }) => {
+            const result = await getGrowingDegreeDays(config.agricultureApiKey, latitude, longitude, {
+                start_date,
+                end_date,
+                base_temperature,
+                ...(lower_cutoff !== undefined && { lower_cutoff }),
+                ...(upper_cutoff !== undefined && { upper_cutoff }),
+                unit,
+            });
+            const metadata = loadMetadata("gdd", unit === "C" ? "metric" : "imperial");
+            return {
+                content: [
+                    { type: "text", text: JSON.stringify({ result, metadata }, null, 2) },
+                ],
+            };
+        }
+    );
+
+    server.tool(
+        "growth_stage",
+        "Get crop growth stage for given latitude and longitude.",
+        {
+            latitude: z.number().describe("Latitude of the location"),
+            longitude: z.number().describe("Longitude of the location"),
+            start_date: z.string().describe("Start date in YYYY-MM-DD format"),
+            end_date: z.string().describe("End date in YYYY-MM-DD format"),
+            crop_name: z.string().describe("Name of the crop (e.g., 'corn', 'soybean', 'wheat')"),
+            unit: agUnitSchema,
+        },
+        async ({ latitude, longitude, start_date, end_date, crop_name, unit }) => {
+            const result = await getGrowthStage(config.agricultureApiKey, latitude, longitude, {
+                start_date,
+                end_date,
+                crop_name,
+                unit,
+            });
+            const metadata = loadMetadata("gdd_accumulated,gdd_required_to_next_stage", unit === "C" ? "metric" : "imperial");
+            return {
+                content: [
+                    { type: "text", text: JSON.stringify({ result, metadata }, null, 2) },
+                ],
+            };
+        }
+    );
+
+    server.tool(
+        "heat_stress_days",
+        "Get heat stress days for given latitude and longitude.",
+        {
+            latitude: z.number().describe("Latitude of the location"),
+            longitude: z.number().describe("Longitude of the location"),
+            start_date: z.string().describe("Start date in YYYY-MM-DD format"),
+            end_date: z.string().describe("End date in YYYY-MM-DD format"),
+            crop_name: z.string().optional().describe("Name of the crop"),
+            heat_stress_threshold: z.number().optional().describe("Temperature threshold for heat stress"),
+        },
+        async ({ latitude, longitude, start_date, end_date, crop_name, heat_stress_threshold }) => {
+            const result = await getHeatStressDays(config.agricultureApiKey, latitude, longitude, {
+                start_date,
+                end_date,
+                ...(crop_name && { crop_name }),
+                ...(heat_stress_threshold !== undefined && { heat_stress_threshold }),
+            });
+            const metadata = loadMetadata("heat_stress_threshold", "metric");
+            return {
+                content: [
+                    { type: "text", text: JSON.stringify({ result, metadata }, null, 2) },
+                ],
+            };
+        }
+    );
+
+    server.tool(
+        "frost_stress_days",
+        "Get frost stress days for given latitude and longitude.",
+        {
+            latitude: z.number().describe("Latitude of the location"),
+            longitude: z.number().describe("Longitude of the location"),
+            start_date: z.string().describe("Start date in YYYY-MM-DD format"),
+            end_date: z.string().describe("End date in YYYY-MM-DD format"),
+            frost_stress_threshold: z.number().optional().describe("Temperature threshold for frost stress"),
+        },
+        async ({ latitude, longitude, start_date, end_date, frost_stress_threshold }) => {
+            const result = await getFrostStressDays(config.agricultureApiKey, latitude, longitude, {
+                start_date,
+                end_date,
+                ...(frost_stress_threshold !== undefined && { frost_stress_threshold }),
+            });
+            const metadata = loadMetadata("frost_stress_threshold", "metric");
+            return {
+                content: [
+                    { type: "text", text: JSON.stringify({ result, metadata }, null, 2) },
+                ],
+            };
+        }
+    );
+
+    server.tool(
+        "daily_pollen_forecast",
+        "Get daily pollen forecast for next 5 days.",
+        {
+            latitude: z.number().describe("Latitude of the location"),
+            longitude: z.number().describe("Longitude of the location"),
+        },
+        async ({ latitude, longitude }) => {
+            const result = await getDailyPollen(config.pollenApiKey, latitude, longitude);
+            return {
+                content: [
+                    { type: "text", text: JSON.stringify(result, null, 2) },
+                ],
+            };
+        }
+    );
+
+    server.tool(
         "convert_city_to_latitude_longitude",
         "Find the latitude and longitude for a given city name.",
         {
@@ -194,6 +333,8 @@ export function createSandboxServer(): McpServer {
         dailyWeatherApiKey: "sandbox-key",
         dailyClimateApiKey: "sandbox-key",
         airQualityApiKey: "sandbox-key",
+        agricultureApiKey: "sandbox-key",
+        pollenApiKey: "sandbox-key",
     });
 }
 
@@ -204,6 +345,8 @@ async function main() {
         dailyWeatherApiKey: process.env.DAILY_WEATHER_API_KEY ?? "",
         dailyClimateApiKey: process.env.DAILY_CLIMATE_API_KEY ?? "",
         airQualityApiKey: process.env.AIR_QUALITY_API_KEY ?? "",
+        agricultureApiKey: process.env.AGRICULTURE_API_KEY ?? "",
+        pollenApiKey: process.env.POLLEN_API_KEY ?? "",
     };
 
     const server = createServer(config);

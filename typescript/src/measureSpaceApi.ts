@@ -16,6 +16,16 @@ const URL_MAPPING: Record<string, string> = {
     "https://ncstsm9hel.execute-api.us-east-1.amazonaws.com/prd/nearest-city",
   geocoding_autocomplete:
     "https://ncstsm9hel.execute-api.us-east-1.amazonaws.com/prd/autocomplete",
+  pollen:
+    "https://api.measurespace.io/pollen/global-daily-pollen-forecast",
+  growing_degree_days:
+    "https://api.measurespace.io/agriculture/growing-degree-days",
+  growth_stage:
+    "https://api.measurespace.io/agriculture/growth-stage",
+  heat_stress_days:
+    "https://api.measurespace.io/agriculture/heat-stress-days",
+  frost_stress_days:
+    "https://api.measurespace.io/agriculture/frost-stress-days",
 };
 
 const DESCRIPTION_MAPPING: Record<string, string> = {
@@ -87,6 +97,7 @@ const DESCRIPTION_MAPPING: Record<string, string> = {
   maxO3: "daily maximum ozone concentration",
   maxPM25: "daily maximum particulate matter 2.5 concentration",
   maxPM10: "daily maximum particulate matter 10 concentration",
+  gdd: "growing degree days",
 };
 
 const UNIT_MAPPING: Record<string, Record<string, string>> = {
@@ -107,6 +118,8 @@ const UNIT_MAPPING: Record<string, Record<string, string>> = {
     meanSO2: "µg/m^3", meanO3: "µg/m^3", meanPM25: "µg/m^3",
     meanPM10: "µg/m^3", maxCO: "µg/m^3", maxNO: "µg/m^3", maxNO2: "µg/m^3",
     maxSO2: "µg/m^3", maxO3: "µg/m^3", maxPM25: "µg/m^3", maxPM10: "µg/m^3",
+    gdd: "°C", heat_stress_threshold: "°C", frost_stress_threshold: "°C",
+    gdd_required_to_nex_stage: "°C", gdd_accumulated: "°C",
   },
   imperial: {
     tp: "inch", t2m: "F", u10: "miles/h", v10: "miles/h", windSpeed: "miles/h",
@@ -125,6 +138,8 @@ const UNIT_MAPPING: Record<string, Record<string, string>> = {
     meanSO2: "µg/m^3", meanO3: "µg/m^3", meanPM25: "µg/m^3",
     meanPM10: "µg/m^3", maxCO: "µg/m^3", maxNO: "µg/m^3", maxNO2: "µg/m^3",
     maxSO2: "µg/m^3", maxO3: "µg/m^3", maxPM25: "µg/m^3", maxPM10: "µg/m^3",
+    gdd: "°F", heat_stress_threshold: "°F", frost_stress_threshold: "°F",
+    gdd_required_to_nex_stage: "°F", gdd_accumulated: "°F",
   },
 };
 
@@ -241,6 +256,71 @@ export async function getDailyAirQuality(
   params: Record<string, string>
 ): Promise<unknown> {
   return callApi(apiKey, URL_MAPPING.daily_air_quality, {
+    latitude,
+    longitude,
+    ...params,
+  });
+}
+
+export async function getGrowingDegreeDays(
+  apiKey: string,
+  latitude: number,
+  longitude: number,
+  params: Record<string, string | number | boolean>
+): Promise<unknown> {
+  return callApi(apiKey, URL_MAPPING.growing_degree_days, {
+    latitude,
+    longitude,
+    ...params,
+  });
+}
+
+export async function getGrowthStage(
+  apiKey: string,
+  latitude: number,
+  longitude: number,
+  params: Record<string, string | number | boolean>
+): Promise<unknown> {
+  return callApi(apiKey, URL_MAPPING.growth_stage, {
+    latitude,
+    longitude,
+    ...params,
+  });
+}
+
+export async function getHeatStressDays(
+  apiKey: string,
+  latitude: number,
+  longitude: number,
+  params: Record<string, string | number | boolean>
+): Promise<unknown> {
+  return callApi(apiKey, URL_MAPPING.heat_stress_days, {
+    latitude,
+    longitude,
+    ...params,
+  });
+}
+
+export async function getFrostStressDays(
+  apiKey: string,
+  latitude: number,
+  longitude: number,
+  params: Record<string, string | number | boolean>
+): Promise<unknown> {
+  return callApi(apiKey, URL_MAPPING.frost_stress_days, {
+    latitude,
+    longitude,
+    ...params,
+  });
+}
+
+export async function getDailyPollen(
+  apiKey: string,
+  latitude: number,
+  longitude: number,
+  params: Record<string, string | number | boolean> = {}
+): Promise<unknown> {
+  return callApi(apiKey, URL_MAPPING.pollen, {
     latitude,
     longitude,
     ...params,

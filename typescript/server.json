@@ -1,7 +1,7 @@
 {
     "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
     "name": "io.github.MeasureSpace/measure-space-mcp-server",
-    "description": "MCP server for weather, climate, air quality and geocoding from measurespace.io",
+    "description": "MCP server for weather, climate, air quality, agriculture, pollen and geocoding from measurespace.io",
     "repository": {
         "url": "https://github.com/MeasureSpace/measure-space-mcp-server",
         "source": "github"
@@ -47,6 +47,20 @@
                 {
                     "name": "AIR_QUALITY_API_KEY",
                     "description": "API key for air quality forecast service",
+                    "isRequired": false,
+                    "format": "string",
+                    "isSecret": true
+                },
+                {
+                    "name": "AGRICULTURE_API_KEY",
+                    "description": "API key for agriculture service (GDD, growth stage, etc.)",
+                    "isRequired": false,
+                    "format": "string",
+                    "isSecret": true
+                },
+                {
+                    "name": "POLLEN_API_KEY",
+                    "description": "API key for daily pollen forecast service",
                     "isRequired": false,
                     "format": "string",
                     "isSecret": true

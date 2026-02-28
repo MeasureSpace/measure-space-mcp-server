@@ -8,11 +8,16 @@ from measure_space_api import (
 	get_daily_climate,
 	get_hourly_air_quality,
 	get_daily_air_quality,
+    get_growing_degree_days,
+	get_growth_stage,
+	get_heat_stress_days,
+	get_frost_stress_days,
+	get_daily_pollen,
 	get_lat_lon_from_city,
 	get_city_from_lat_lon,
     get_metadata,
 )
-from typing import Literal
+from typing import Literal, Optional
 
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
@@ -21,8 +26,8 @@ logger = logging.getLogger("MeasureSpaceMCP")
 # Create an MCP server named "AdvancedWeather"
 mcp = FastMCP(name="MeasureSpaceMCP",
               prompt="""
-              This is a Weather, Climate, Air Quality and Geocoding server. 
-              You can get weather, climate and air quality forecast and 
+              This is a Weather, Climate, Air Quality, Agriculture, Pollen and Geocoding server. 
+              You can get weather, climate, air quality, agriculture, pollen forecast and 
               geocoding information by calling the available tools.
               """
               )
@@ -33,6 +38,8 @@ daily_weather_api_key = os.getenv('DAILY_WEATHER_API_KEY')
 hourly_weather_api_key = os.getenv('HOURLY_WEATHER_API_KEY')
 daily_climate_api_key = os.getenv('DAILY_CLIMATE_API_KEY')
 air_quality_api_key = os.getenv('AIR_QUALITY_API_KEY')
+agriculture_api_key = os.getenv('AGRICULTURE_API_KEY')
+pollen_api_key = os.getenv('POLLEN_API_KEY')
 
 def load_metadata(input_vars: str, unit: str=Literal['metric', 'imperial']):
     """Load variable metadata."""
@@ -115,6 +122,89 @@ async def daily_air_quality_forecast(latitude: float, longitude: float):
     metadata = load_metadata(input_vars, 'metric')
 
     return result, metadata
+
+@mcp.tool()
+async def growing_degree_days(latitude: float, longitude: float, start_date: str, end_date: str, base_temperature: float = 50.0, lower_cutoff: Optional[float] = None, upper_cutoff: Optional[float] = None, unit: str = Literal['F', 'C']):
+    """Get growing degree days (GDD) for given latitude and longitude."""
+    params = {
+        'start_date': start_date,
+        'end_date': end_date,
+        'base_temperature': base_temperature,
+        'lower_cutoff': lower_cutoff,
+        'upper_cutoff': upper_cutoff,
+        'unit': unit,
+    }
+    result = get_growing_degree_days(
+        api_key=agriculture_api_key,
+        latitude=latitude,
+        longitude=longitude,
+        params=params
+    )
+    metadata = load_metadata('gdd', 'metric' if unit == 'C' else 'imperial')
+    return result, metadata
+
+@mcp.tool()
+async def growth_stage(latitude: float, longitude: float, start_date: str, end_date: str, crop_name: str, unit: str = Literal['F', 'C']):
+    """Get crop growth stage for given latitude and longitude."""
+    params = {
+        'start_date': start_date,
+        'end_date': end_date,
+        'crop_name': crop_name,
+        'unit': unit,
+    }
+    result = get_growth_stage(
+        api_key=agriculture_api_key,
+        latitude=latitude,
+        longitude=longitude,
+        params=params
+    )
+    metadata = load_metadata('gdd_accumulated,gdd_required_to_next_stage', 'metric' if unit == 'C' else 'imperial')
+    return result, metadata
+
+@mcp.tool()
+async def heat_stress_days(latitude: float, longitude: float, start_date: str, end_date: str, crop_name: Optional[str] = None, heat_stress_threshold: Optional[float] = None):
+    """Get heat stress days for given latitude and longitude."""
+    params = {
+        'start_date': start_date,
+        'end_date': end_date,
+        'crop_name': crop_name,
+        'heat_stress_threshold': heat_stress_threshold,
+    }
+    result = get_heat_stress_days(
+        api_key=agriculture_api_key,
+        latitude=latitude,
+        longitude=longitude,
+        params=params
+    )
+    metadata = load_metadata('heat_stress_threshold', 'metric') # threshold is usually in metric internally or specified
+    return result, metadata
+
+@mcp.tool()
+async def frost_stress_days(latitude: float, longitude: float, start_date: str, end_date: str, frost_stress_threshold: Optional[float] = None):
+    """Get frost stress days for given latitude and longitude."""
+    params = {
+        'start_date': start_date,
+        'end_date': end_date,
+        'frost_stress_threshold': frost_stress_threshold,
+    }
+    result = get_frost_stress_days(
+        api_key=agriculture_api_key,
+        latitude=latitude,
+        longitude=longitude,
+        params=params
+    )
+    metadata = load_metadata('frost_stress_threshold', 'metric')
+    return result, metadata
+
+@mcp.tool()
+async def daily_pollen_forecast(latitude: float, longitude: float):
+    """Get daily pollen forecast for next 5 days."""
+    result = get_daily_pollen(
+        api_key=pollen_api_key,
+        latitude=latitude,
+        longitude=longitude,
+    )
+    return result
 
 @mcp.tool()
 async def convert_city_to_latitude_longitude(location_name: str):

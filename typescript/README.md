@@ -31,6 +31,8 @@ HOURLY_WEATHER_API_KEY=<your-key>
 DAILY_WEATHER_API_KEY=<your-key>
 DAILY_CLIMATE_API_KEY=<your-key>
 AIR_QUALITY_API_KEY=<your-key>
+AGRICULTURE_API_KEY=<your-key>
+POLLEN_API_KEY=<your-key>
 ```
 
 ## Usage
@@ -50,7 +52,9 @@ Add to `claude_desktop_config.json`:
         "HOURLY_WEATHER_API_KEY": "<your-key>",
         "DAILY_WEATHER_API_KEY": "<your-key>",
         "DAILY_CLIMATE_API_KEY": "<your-key>",
-        "AIR_QUALITY_API_KEY": "<your-key>"
+        "AIR_QUALITY_API_KEY": "<your-key>",
+        "AGRICULTURE_API_KEY": "<your-key>",
+        "POLLEN_API_KEY": "<your-key>"
       }
     }
   }
@@ -80,6 +84,11 @@ npm run build   # compile TypeScript
 | `daily_climate_forecast` | Daily climate for next 9 months |
 | `hourly_air_quality_forecast` | Hourly air quality for next 4 days |
 | `daily_air_quality_forecast` | Daily air quality for next 4 days |
+| `growing_degree_days` | Accumulated growing degree days |
+| `growth_stage` | Crop growth stage and GDD requirements |
+| `heat_stress_days` | Number of heat stress days for a crop |
+| `frost_stress_days` | Number of frost stress days for a crop |
+| `daily_pollen_forecast` | Daily pollen forecast for next 5 days |
 | `convert_city_to_latitude_longitude` | City name → lat/lon |
 | `find_nearest_city_from_latitude_longitude` | Lat/lon → nearest city |
 
@@ -96,5 +105,5 @@ curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.Mea
 
 The TypeScript implementation directly calls the MeasureSpace API endpoints using `fetch` (no npm wrapper package needed):
 
-- `src/index.ts` — MCP server with all 7 tools
-- `src/measureSpaceApi.ts` — HTTP client for all 7 MeasureSpace API endpoints
+- `src/index.ts` — MCP server with all 12 tools
+- `src/measureSpaceApi.ts` — HTTP client for all 12 MeasureSpace API endpoints
