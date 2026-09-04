@@ -1,6 +1,6 @@
 # MCP Server for Measure Space API Services
 
-[![smithery badge](https://smithery.ai/badge/@MeasureSpace/measure-space-mcp-server)](https://smithery.ai/server/@MeasureSpace/measure-space-mcp-server)
+[![LightNow capabilities](https://lightnow.ai/badge/io.github.MeasureSpace/measure-space-mcp-server)](https://lightnow.ai/servers/io.github.MeasureSpace/measure-space-mcp-server)
 
 A Model Context Protocol (MCP) server for weather, climate, air quality, agriculture, pollen and geocoding services from [measurespace.io](https://measurespace.io).
 
